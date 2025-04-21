@@ -33,7 +33,7 @@ chown -R root:root /home/root/aws-greengrass-lite/
 cp /home/root/aws-greengrass-lite/lib/systemd/system/* /lib/systemd/system/.
 
 # Copy certs to cert directory
-cp -r ${GG_DIR}certs /home/root/certs
+cp -r ${GG_DIR}certs/ /home/root/certs/
 
 # Make run directory
 mkdir -p /var/lib/greengrass

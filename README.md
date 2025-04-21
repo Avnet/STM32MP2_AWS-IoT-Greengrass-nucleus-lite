@@ -51,9 +51,7 @@ Before running the configuration scripts, you need to update specific fields in 
   
 - **THING_NAME**: A unique name for your IoT Thing. This name will be used in AWS IoT to identify your Greengrass Core device.
 
-- **THING_GROUP_NAME**: The name of the IoT Thing Group you want to create for organizing your Greengrass Core devices. It helps in managing multiple devices efficiently.
-
-> Note: There are optional configuration change described [below](#72-optional-configuration-parameters)
+- **REMOTE_SCRIPT_PATH**: The directory path on the STM32MP2 DK where the scripts and configuration files will be copied. Update this to specify the desired location on the device. Default is `~/`.
 
 ### 4.3. Run the Scripts
 
@@ -125,74 +123,49 @@ This repository provides detailed steps for setting up a BLE Gateway on Greengra
 Follow the instructions in the repository to complete the deployment.
 
 
-## 8. Configuration Files
+## 8. Script Summary
 
-### 8.1. Policies
-- **IoTPolicyDocument.json**: Defines the IoT policy document for the device.
-- **IoTRoleAliasPolicy.json**: Defines Role alias policy. Updated by the *2_PC_IotConfig.sh* script
-- **TokenExchangeAccessPolicyDocument.json**: Specifies the policy for Token Exchange access.
-- **TokenExchangeRoleAssumePolicyDocument.json**: Defines the policy for Token Exchange role assumptions.
-
-### 8.2. Optional Configuration Parameters
-
-`config.json` file with the following parameters can be left as default, understanding them may help in future customization:
-
-- **IoTConfiguration**:
-  - **AWS_IOT_POLICY**: The IoT policy name for your Thing. Default is `"MyGreengrassV2IoTThingPolicy"`.
-  - **ROLE_ALIAS_NAME**: The role alias for token exchange. Default is `"MyGreengrassCoreTokenExchangeRoleAlias"`.
-  - **EXCHANGE_ROLE_POLICY**: Policy for Token Exchange access. Default is `"MyGreengrassV2TokenExchangeRoleAccess"`.
-  - **ROLE_NAME**: Name of the IAM role for the Thing. Default is `"MyGreengrassV2TokenExchangeRole"`.
-  - **IOT_ROLE_ALIAS_POLICY_NAME**: Policy name for the role alias. Default is `"MyGreengrassCoreTokenExchangeRoleAliasPolicy"`.
-  - **REGION**: AWS region for the IoT resources. Updated by the *2_PC_IotConfig.sh* script
-  - **DATA_ENDPOINT** : Endpoint address. Updated by the *2_PC_IotConfig.sh* script
-  - **CRED_ENDPOINT** : Credential Endpoint address. Updated by the *2_PC_IotConfig.sh* script
-
-## 9. Script Summary
-
-### 9.1. load_config.sh
+### 8.1. load_config.sh
 
 Parses the various configuration JSON files and exports their contents as environment variables. This script should be run before executing any of the others.
 
-### 9.2. 1_PC_IamConfig.sh
+### 8.2. 1_PC_IamConfig.sh
 
 Sets up AWS IAM roles and policies for the device by:
 
 - Loading the necessary configuration from the environment variables set by `load_config.sh`.
 - Creates the IAM roles and policies required for Greengrass V2 setup.
 
-### 9.2. 2_PC_IotConfig.sh
+### 8.2. 2_PC_IotConfig.sh
 
 Configures AWS IoT resources
 
-### 9.2. 3_PC_ThingConfig.sh
+### 8.2. 3_PC_ThingConfig.sh
 
 Create a Thing in AWS and download the certs to ./gg_lite/certs
 
-### 9.3. 4_PC_GreengrassConfig.sh
+### 8.3. 4_PC_GreengrassConfig.sh
 
 Updates the init_config.yml file
 
-### 9.4. 5_MPU_RunGGLite.sh
+### 8.4. 5_MPU_RunGGLite.sh
 
 Configures and restarts the Greengrass Core service:
 
 - Updates `config.yaml` with security settings and AWS resource details.
 
-### 9.5. execute.sh
+### 8.5. execute.sh
 
 Orchestrates the execution of all configuration scripts:
 
 - Copies the local configuration and gg_lite to the STM32MP2 DK.
 - Install and run gg_lite on STM32MP2 DK.
 
-## 10. Cleanup Scripts
+## 9. Cleanup Scripts
 
 After configuring the STM32MP2 DK as an AWS Greengrass Core device, you can use the provided cleanup scripts to remove the AWS resources created during the setup. These scripts will handle the deletion of IAM roles, IoT Things, certificates, policies, and other associated resources.
 
 `cleanup.sh` calls both of the following cleanup scripts:
-
- - `IamConfig_Cleanup.sh` : Deletes IAM resources 
- - `IotConfig_Cleanup.sh` : Deletes IoT resources
 
 Usage:
 ```bash

@@ -72,7 +72,7 @@ check_ssh
 echo "Running PC IAM configuration script..."
 
 
-
+mkdir -p ./gg_lite/certs/
 
 
 echo "Downloading AmazonRootCA1.pem"

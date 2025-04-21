@@ -26,11 +26,10 @@ delete_file_from_board() {
 LOAD_CONFIG_FILE="./load_config.sh"
 source $LOAD_CONFIG_FILE
 
-source cleanup/IotConfig_Cleanup.sh
-source cleanup/IamConfig_Cleanup.sh
+source cleanup/iotconnect_cleanup.sh
 
 # Delete the configuration files from the board
-# delete_file_from_board $MPU_GG_CONFIG_SCRIPT
+delete_file_from_board $MPU_GG_CONFIG_SCRIPT
 
-script_name=$(basename "$0")
+# Delete the certs from the board
 echo "$script_name script execution completed."
