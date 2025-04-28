@@ -21,6 +21,7 @@ GG_DIR="/home/root/gg_lite/"
 # Install dependencies
 dpkg -i ${GG_DIR}libzip_1.10.1-r0.0_arm64.deb
 dpkg -i ${GG_DIR}uriparser_0.9.8-r0.0_arm64.deb 
+apt install -y dos2unix
 
 # Extract files
 tar xvf ${GG_DIR}gglite.gz -C /home/root/
@@ -32,7 +33,7 @@ chown -R root:root /home/root/aws-greengrass-lite/
 cp /home/root/aws-greengrass-lite/lib/systemd/system/* /lib/systemd/system/.
 
 # Copy certs to cert directory
-cp -r ${GG_DIR}certs /home/root/certs 
+cp -r ${GG_DIR}certs/ /home/root/certs/
 
 # Make run directory
 mkdir -p /var/lib/greengrass
@@ -43,6 +44,9 @@ mkdir -p /etc/greengrass
 # Copy config file to config directory
 cp ${GG_DIR}config.yaml /etc/greengrass
 
+cp /home/root/certs/* /var/lib/greengrass/
+
 # Run nucleus
 chmod +x ${GG_DIR}run_nucleus
+dos2unix ${GG_DIR}run_nucleus
 ${GG_DIR}run_nucleus

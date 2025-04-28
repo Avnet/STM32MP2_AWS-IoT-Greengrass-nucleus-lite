@@ -70,35 +70,21 @@ check_ssh(){
 check_ssh
 
 echo "Running PC IAM configuration script..."
-bash 1_PC_IamConfig.sh
-if [ $? -ne 0 ]; then
-    echo "Failed to execute 1_PC_IamConfig.sh on the PC."
-    exit 1
-fi
 
-echo "Running PC IoT configuration script..."
-bash 2_PC_IotConfig.sh
-if [ $? -ne 0 ]; then
-    echo "Failed to execute 2_PC_IotConfig.sh on the PC."
-    exit 1
-fi
 
-echo "Running PC Thing configuration script..."
-bash 3_PC_ThingConfig.sh
-if [ $? -ne 0 ]; then
-    echo "Failed to execute 3_PC_ThingConfig.sh on the PC."
-    exit 1
-fi
+mkdir -p ./gg_lite/certs/
+
 
 echo "Downloading AmazonRootCA1.pem"
 curl -o ./gg_lite/certs/AmazonRootCA1.pem https://www.amazontrust.com/repository/AmazonRootCA1.pem
 
-echo "Running PC Greengrass configuration script..."
-bash 4_PC_GreengrassConfig.sh
-if [ $? -ne 0 ]; then
-    echo "Failed to execute 4_PC_GreengrassConfig.sh on the PC."
-    exit 1
-fi
+
+echo "extracting bundle.."
+unzip -o ./gg_lite/${THING_NAME}-bundles.zip -d ./gg_lite/certs/
+
+echo "Copying config.yaml to gg_lite folder..."
+mv ./gg_lite/certs/config.yaml ./gg_lite/
+
 
 echo "Copying gg_lite files to STM32MP ..."
 scp -r ./gg_lite root@$BOARD_IP:$REMOTE_SCRIPT_PATH
